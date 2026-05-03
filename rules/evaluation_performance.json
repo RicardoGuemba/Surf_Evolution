@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "prone_torso_max_deg": 40.0,
+  "standing_torso_min_deg": 64.0,
+  "prone_body_aspect_min": 1.28,
+  "standing_body_aspect_max": 0.78,
+  "popup_prone_min_duration_s": 0.35,
+  "popup_max_transition_s": 2.6,
+  "popup_fsm_timeout_s": 3.1,
+  "alignment_score_decay_k": 8.0,
+  "pipeline_knee_flex_divisor_deg": 120.0,
+  "pipeline_hip_vertical_coef": 130.0,
+  "pipeline_weight_knee": 0.55,
+  "pipeline_weight_hip": 0.45,
+  "evaluation_min_keypoint_confidence": 0.38
+}

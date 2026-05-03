@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Vídeos gravados
+recordings/
+*.mp4
+*.avi
+*.mov
+
+# Pesos PyTorch (baixados ou locais)
+*.pt
+# Opcional: versionar um peso leve local descomentando a linha desejada
+# !yolov8n-pose.pt
+
+# Cache de testes
+.pytest_cache/
+
+# Arquivos temporários
+test_codec_check.mp4
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# POC sessão
+session_summary.json
+
+# Logs
+*.log
+

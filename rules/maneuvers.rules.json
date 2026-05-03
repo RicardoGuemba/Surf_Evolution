@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0",
+  "sampling_fps_assumption": 30,
+  "global": {
+    "min_keypoint_confidence": 0.35,
+    "smoothing": { "type": "ema", "alpha": 0.4 }
+  },
+  "maneuvers": [
+    {
+      "id": "bottom_turn",
+      "label": "Bottom Turn",
+      "cooldown_ms": 1200,
+      "score": {
+        "base": 100,
+        "multipliers": [{ "feature": "turn_intensity", "k": 0.8 }]
+      },
+      "conditions": [
+        { "feature": "torso_lean_deg", "op": ">=", "value": 18, "duration_ms": 200 },
+        { "feature": "hip_rotation_deg_s", "op": ">=", "value": 60, "duration_ms": 150 }
+      ]
+    }
+  ]
+}
