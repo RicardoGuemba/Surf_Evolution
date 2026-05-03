@@ -254,24 +254,62 @@ except Exception as _rules_err:
     rules_runtime = None
 
 
-def _draw_pose_keypoints_green_bgr(
+# Esqueleto COCO 17 kpt igual a ultralytics.utils.plotting.Annotator (pares 1-based).
+_YOLO_POSE_SKELETON_1: tuple[tuple[int, int], ...] = (
+    (16, 14),
+    (14, 12),
+    (17, 15),
+    (15, 13),
+    (12, 13),
+    (6, 12),
+    (7, 13),
+    (6, 7),
+    (6, 8),
+    (7, 9),
+    (8, 10),
+    (9, 11),
+    (2, 3),
+    (1, 2),
+    (1, 3),
+    (2, 4),
+    (3, 5),
+    (4, 6),
+    (5, 7),
+)
+
+
+def _draw_pose_skeleton_green_bgr(
     img: np.ndarray,
     result: object,
     *,
     min_conf: float,
 ) -> None:
-    """Apenas pontos-chave em verde (BGR); sem skeleton, caixas nem labels."""
+    """Keypoints e linhas do esqueleto em verde BGR (sem caixas nem labels)."""
     kpts_obj = getattr(result, "keypoints", None)
     if kpts_obj is None or not hasattr(kpts_obj, "data") or len(kpts_obj.data) == 0:
         return
     h, w = img.shape[:2]
     radius = max(3, min(7, int(min(h, w) / 140)))
+    thick = max(2, min(6, int(min(h, w) / 120)))
     green = (0, 255, 0)
     for pers in kpts_obj.data:
         arr = pers.cpu().numpy()
+        if arr.shape[0] != 17 or arr.shape[1] < 2:
+            continue
+        # Linhas primeiro; círculos por cima.
+        for a, b in _YOLO_POSE_SKELETON_1:
+            i, j = a - 1, b - 1
+            if arr.shape[1] >= 3:
+                if float(arr[i, 2]) < min_conf or float(arr[j, 2]) < min_conf:
+                    continue
+            x1, y1 = int(round(float(arr[i, 0]))), int(round(float(arr[i, 1])))
+            x2, y2 = int(round(float(arr[j, 0]))), int(round(float(arr[j, 1])))
+            if x1 < 0 or y1 < 0 or x1 >= w or y1 >= h or x2 < 0 or y2 < 0 or x2 >= w or y2 >= h:
+                continue
+            cv2.line(img, (x1, y1), (x2, y2), green, thick, lineType=cv2.LINE_AA)
         for i in range(arr.shape[0]):
-            x, y, c = float(arr[i][0]), float(arr[i][1]), float(arr[i][2])
-            if c < min_conf:
+            x, y, c = float(arr[i][0]), float(arr[i][1]), float(arr[i][2]) if arr.shape[1] > 2 else 1.0
+            if arr.shape[1] >= 3 and c < min_conf:
                 continue
             xi, yi = int(round(x)), int(round(y))
             if xi < 0 or yi < 0 or xi >= w or yi >= h:
@@ -645,7 +683,7 @@ def process_frame(frame, enabled_models):
                     if rules_runtime
                     else 0.35
                 )
-                _draw_pose_keypoints_green_bgr(
+                _draw_pose_skeleton_green_bgr(
                     processed_frame, result, min_conf=kpt_draw_min
                 )
 
