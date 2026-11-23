@@ -1,6 +1,13 @@
-# Surf Detection — POC
+# Análise de surf com visão computacional
 
 Aplicação monolítica em Python: **Gradio** na porta **7860**, detecção **YOLOv8n** (COCO: `person`, `surfboard`), pose **YOLOv8n-pose**, associação surfista–prancha e overlay em tempo real. Otimizado para **baixa latência em Mac** (CPU/MPS): `imgsz` 512 por padrão fora de CUDA.
+
+**Primeira experiência.** Abra a interface Gradio na porta 7860 e acompanhe a sobreposição de detecção e pose. Inspecione um trecho com surfista e prancha visíveis e outro em que a prancha fica parcialmente oculta.
+
+**Arquivos de referência**
+
+- [app.py](app.py)
+- [tests](tests)
 
 ## Requisitos
 
